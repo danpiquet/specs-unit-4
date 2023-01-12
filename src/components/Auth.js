@@ -7,7 +7,7 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [register, setRegister] = useState(true);
 
-  const baseUrl = "https://socialmtn.devmountain.com";
+  // const baseUrl = "https://socialmtn.devmountain.com";
 
   const authCtx = useContext(AuthContext);
 
@@ -17,20 +17,24 @@ const Auth = () => {
     const bodyObj = { username, password };
 
     axios
-      .post(register ? `${baseUrl}/register` : `${baseUrl}/login`, bodyObj)
+      .post(register ? `/register` : `/login`, bodyObj)
       .then((res) => {
-        console.log(authCtx)
+        console.log("AFTER AUTH", res.data);
         authCtx.login(res.data.token, res.data.exp, res.data.userId);
 
         console.log(res.data);
       })
-     .catch(err => {
-      console.log(err)
-      alert(`Sorry, but we failed to register/log in user ${username}`)
-     })
+      .catch((err) => {
+        // setMessage(err.response.data);
+        // setDisplay("block");
+        setPassword("");
+        setUsername("");
+        console.log(err);
+        alert(`Sorry, but we failed to register/log in username: ${username}`);
+      });
     setRegister(!register);
     console.log("submitHandler called");
-    console.log(bodyObj)
+    console.log(bodyObj);
   };
 
   return (

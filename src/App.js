@@ -11,6 +11,7 @@ import Profile from "./components/Profile";
 
 const App = () => {
   const authCtx = useContext(AuthContext);
+  console.log('app', authCtx.token)
   return (
     <div className="app">
       <Header />

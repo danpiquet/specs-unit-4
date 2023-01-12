@@ -1,8 +1,22 @@
 require("dotenv").config();
-const { SECRET } = process.env.SECRET;
+const SECRET = process.env.SECRET;
 const { User } = require("../models/user.js");
-const { bcrypt } = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
+
+const createToken = (username, id) => {
+ return jwt.sign(
+    {
+      username,
+      id,
+    },
+    SECRET,
+    {
+      expiresIn: "2d",
+    }
+  );
+};
 
 const register = async (req, res) => {
   try {
@@ -23,7 +37,7 @@ const register = async (req, res) => {
         newUser.dataValues.username,
         newUser.dataValues.id
       );
-      console.log(newUser);
+      console.log(token);
       const exp = Date.now() + 1000 * 60 * 60 * 48;
       res.status(200).send({
         username: newUser.dataValues.username,
@@ -33,7 +47,8 @@ const register = async (req, res) => {
       });
     }
   } catch (err) {
-    console.log(err);
+    console.log("Error in register function", err);
+    res.sendStatus(400);
   }
 };
 const login = async (req, res) => {
@@ -64,26 +79,14 @@ const login = async (req, res) => {
       res.status(400).send("Unable to log in");
     }
   } catch (err) {
-    console.log(err);
-    res.status(400);
+    console.log("Error in the login function", err);
+    res.sendStatus(400);
   }
 };
 
 const logout = (req, res) => {
   console.log("logout function");
 };
-
-const createToken = (username, id) =>
-  jwt.sign(
-    {
-      username,
-      id,
-    },
-    SECRET,
-    {
-      expiresIn: "2d",
-    }
-  );
 
 module.exports = {
   register,

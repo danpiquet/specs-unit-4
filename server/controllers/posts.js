@@ -23,8 +23,8 @@ const getAllPosts = async (req, res) => {
 const getCurrentUserPosts = async (req, res) => {
   try {
     const { userId } = req.params;
-    const posts = await User.findAll({
-      where: { userId: userId },
+    const posts = await Post.findAll({
+      where: { userId: +userId },
       include: [
         {
           model: User,
@@ -38,7 +38,7 @@ const getCurrentUserPosts = async (req, res) => {
     console.log("Error in getCurrentUserPosts", err);
     res.sendStatus(400);
   }
-  console.log("getCurrentUserPosts function");
+  // console.log("getCurrentUserPosts function");
 };
 const addPost = async (req, res) => {
   try {
